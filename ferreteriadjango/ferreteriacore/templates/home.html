@@ -7,37 +7,61 @@
     <title>Catálogo de Ferretería</title>
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header text-center">
-            <h1>Catálogo de Ferretería</h1>
-            <p>Todo lo que necesitas para tus proyectos de construcción y reparación</p>
-        </header>
-
-        <div class="search-filter">
-            <input type="text" class="form-control mb-2" id="search-input" placeholder="Buscar productos...">
-            <select class="form-control mb-4" id="category-select">
-                <option value="">Filtrar por categoría</option>
-                <option value="electrodomesticos">Electrodomésticos</option>
-                <option value="herramientas">Herramientas</option>
-                <option value="pinturas">Pinturas</option>
-            </select>
+    <header class="bg-dark text-white text-center py-5">
+        <div class="container">
+            <h1 class="display-4">Catálogo de Ferretería</h1>
+            <p class="lead">Todo lo que necesitas para tus proyectos de construcción y reparación.</p>
+            <div class="search-filter mb-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="search-input" placeholder="Buscar productos...">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-light" type="button" onclick="filterProducts()"><i class="fas fa-search"></i> Buscar</button>
+                    </div>
+                </div>
+                <select class="form-control mt-2" id="category-select" onchange="filterProducts()">
+                    <option value="">Filtrar por categoría</option>
+                    <option value="electrodomesticos">Electrodomésticos</option>
+                    <option value="herramientas">Herramientas</option>
+                    <option value="pinturas">Pinturas</option>
+                </select>
+            </div>
         </div>
+    </header>
 
-        <!-- Categorías -->
-        <h2 class="category-title">Productos</h2>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">Ferretería</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <h2 class="category-title">Productos Destacados</h2>
         {% for categoria, productos in productos_por_categoria %}
-            <h3>{{ categoria|capfirst }}</h3>
+            <h3 class="category-name">{{ categoria|capfirst }}</h3>
             <div class="row">
                 {% for producto in productos %}
-                    <div class="col-md-4">
-                        <div class="product-card" data-category="{{ categoria|lower }}">
-                            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid rounded">
-                            <h5 class="mt-2">{{ producto.nombre }}</h5>
-                            <p class="text-muted">{{ producto.descripcion }}</p>
-                            <p class="font-weight-bold">${{ producto.precio }}</p>
-                            <button class="btn btn-primary">Agregar al carrito</button>
+                    <div class="col-md-4 mb-4">
+                        <div class="product-card shadow-sm">
+                            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="card-img-top">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ producto.nombre }}</h5>
+                                <p class="card-text text-muted">{{ producto.descripcion }}</p>
+                                <p class="font-weight-bold">${{ producto.precio }}</p>
+                                <button class="btn btn-primary">Agregar al carrito</button>
+                            </div>
                         </div>
                     </div>
                 {% empty %}
@@ -46,6 +70,10 @@
             </div>
         {% endfor %}
     </div>
+
+    <footer class="bg-light text-center py-4">
+        <p>&copy; 2024 Ferretería. Todos los derechos reservados.</p>
+    </footer>
 
     <script>
         const searchInput = document.getElementById('search-input');
@@ -58,9 +86,9 @@
             const selectedCategory = categorySelect.value.toLowerCase();
 
             productCards.forEach(card => {
-                const productName = card.querySelector('h5').textContent.toLowerCase();
+                const productName = card.querySelector('.card-title').textContent.toLowerCase();
                 const productCategory = card.getAttribute('data-category').toLowerCase();
-                
+
                 const matchesSearch = productName.includes(searchTerm);
                 const matchesCategory = selectedCategory === '' || productCategory === selectedCategory;
 
@@ -71,10 +99,6 @@
                 }
             });
         }
-
-        // Event listeners
-        searchInput.addEventListener('input', filterProducts);
-        categorySelect.addEventListener('change', filterProducts);
     </script>
 </body>
-<
+</html>
