@@ -7,6 +7,7 @@ class producto(models.Model):
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     categoria = models.CharField(max_length=100)
     disponible = models.BooleanField(default=True)
+    oferta = models.BooleanField(default=False)
     codigo = models.CharField(max_length=100)
     imagen = models.ImageField(upload_to='productos/', null=True, blank=True)
 

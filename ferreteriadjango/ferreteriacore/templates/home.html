@@ -66,21 +66,24 @@
         <div class="container my-4" id="ofertas">
             <h2 class="text-center">Ofertas Especiales</h2>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="card">
-                        <img src="oferta1.jpg" class="card-img-top" alt="Oferta 1">
-                        <div class="card-body">
-                            <h5 class="card-title">Producto en Oferta 1</h5>
-                            <p class="card-text">Descripción de la oferta.</p>
-                            <p class="font-weight-bold">$20.00</p>
-                            <button class="btn btn-primary">Comprar Ahora</button>
+                {% for producto in productos_en_oferta %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ producto.nombre }}</h5>
+                                <p class="card-text">{{ producto.descripcion }}</p>
+                                <p class="font-weight-bold">${{ producto.precio }}</p>
+                                <button class="btn btn-primary">Comprar Ahora</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Agrega más tarjetas de ofertas según sea necesario -->
+                {% empty %}
+                    <p>No hay productos en oferta.</p>
+                {% endfor %}
             </div>
         </div>
-    </div>
+        
 
     <script>
         const searchInput = document.getElementById('search-input');
