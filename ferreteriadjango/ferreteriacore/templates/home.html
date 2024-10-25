@@ -4,57 +4,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Ferretería</title>
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Catálogo de Ferretería</title>
 </head>
 <body>
-    <header class="bg-dark text-white text-center py-5">
-        <div class="container">
-            <h1 class="display-4">Catálogo de Ferretería</h1>
-            <p class="lead">Todo lo que necesitas para tus proyectos de construcción y reparación.</p>
-            <div class="search-filter mb-4">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="search-input" placeholder="Buscar productos...">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-light" type="button" onclick="filterProducts()"><i class="fas fa-search"></i> Buscar</button>
-                    </div>
-                </div>
-                <select class="form-control mt-2" id="category-select" onchange="filterProducts()">
-                    <option value="">Filtrar por categoría</option>
-                    <option value="electrodomesticos">Electrodomésticos</option>
-                    <option value="herramientas">Herramientas</option>
-                    <option value="pinturas">Pinturas</option>
-                </select>
-            </div>
-        </div>
-    </header>
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="#">Ferretería</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Productos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <div class="container my-4">
+        <header class="text-center mb-4 banner">
+            <h1 class="display-4">Catálogo de Ferretería</h1>
+            <p class="lead">Todo lo que necesitas para tus proyectos de construcción y reparación</p>
+        </header>
+
+        <div class="search-filter mb-4">
+            <input type="text" id="search-input" class="form-control mb-2" placeholder="Buscar productos...">
+            <select id="category-select" class="form-control mb-4">
+                <option value="">Filtrar por categoría</option>
+                <option value="electrodomesticos">Electrodomésticos</option>
+                <option value="herramientas">Herramientas</option>
+                <option value="pinturas">Pinturas</option>
+                <!-- Agrega más categorías según sea necesario -->
+            </select>
+        </div>
+
         <h2 class="category-title">Productos Destacados</h2>
         {% for categoria, productos in productos_por_categoria %}
             <h3 class="category-name">{{ categoria|capfirst }}</h3>
             <div class="row">
                 {% for producto in productos %}
                     <div class="col-md-4 mb-4">
-                        <div class="product-card shadow-sm">
+                        <div class="product-card shadow-sm" data-category="{{ categoria|lower }}">
                             <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="card-img-top">
                             <div class="card-body">
                                 <h5 class="card-title">{{ producto.nombre }}</h5>
@@ -70,10 +48,6 @@
             </div>
         {% endfor %}
     </div>
-
-    <footer class="bg-light text-center py-4">
-        <p>&copy; 2024 Ferretería. Todos los derechos reservados.</p>
-    </footer>
 
     <script>
         const searchInput = document.getElementById('search-input');
@@ -99,6 +73,10 @@
                 }
             });
         }
+
+        // Event listeners
+        searchInput.addEventListener('input', filterProducts);
+        categorySelect.addEventListener('change', filterProducts);
     </script>
 </body>
 </html>
