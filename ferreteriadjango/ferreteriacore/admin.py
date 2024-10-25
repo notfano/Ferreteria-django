@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import producto
+from .models import admin_web
 # Register your models here.
 
 class ProductoAdmin(admin.ModelAdmin):
@@ -7,3 +8,10 @@ class ProductoAdmin(admin.ModelAdmin):
     search_fields = ('nombre', 'codigo', 'categoria')  # Campos que se pueden buscar
 
 admin.site.register(producto, ProductoAdmin)
+
+
+
+    
+
+
+admin.site.register(admin_web)

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import producto
+from .models import admin_web
 
 def pagina_principal(request):
     # Filtrar productos que están en oferta
@@ -8,6 +9,7 @@ def pagina_principal(request):
     # Obtener categorías distintas y productos por categoría
     categorias = producto.objects.values_list('categoria', flat=True).distinct()
     productos_por_categoria = []
+    adminweb = admin_web.objects.first()
 
     for categoria in categorias:
         productos = producto.objects.filter(categoria=categoria)
@@ -17,4 +19,5 @@ def pagina_principal(request):
     return render(request, 'home.html', {
         'productos_por_categoria': productos_por_categoria,
         'productos_en_oferta': productos_en_oferta,
+        'admin_web':adminweb
     })

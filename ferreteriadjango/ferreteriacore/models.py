@@ -13,3 +13,7 @@ class producto(models.Model):
 
     def __str__(self):
         return f"{self.nombre} ({self.codigo})"
+    
+class admin_web (models.Model):
+    fondo = models.ImageField(upload_to='web/', null=True, blank=True)
+
