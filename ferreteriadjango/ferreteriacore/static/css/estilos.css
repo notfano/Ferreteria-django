@@ -48,3 +48,12 @@ h1 {
 .btn {
     margin-top: 1rem;
 }
+
+/* Estilos de Navbar */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+    color: #007bff !important; /* Color de los enlaces */
+}
