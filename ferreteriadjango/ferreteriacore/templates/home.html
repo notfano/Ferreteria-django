@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Ferretería</title>
-   
-   
-<style type="text/css" id="operaUserStyle"></style><style type="text/css"></style></head>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
 <body>
-    
     <div class="container">
         <header class="header text-center">
             <h1>Catálogo de Ferretería</h1>
@@ -18,8 +16,8 @@
         </header>
 
         <div class="search-filter">
-            <input type="text" class="form-control mb-2" placeholder="Buscar productos...">
-            <select class="form-control mb-4">
+            <input type="text" class="form-control mb-2" id="search-input" placeholder="Buscar productos...">
+            <select class="form-control mb-4" id="category-select">
                 <option value="">Filtrar por categoría</option>
                 <option value="electrodomesticos">Electrodomésticos</option>
                 <option value="herramientas">Herramientas</option>
@@ -27,68 +25,56 @@
             </select>
         </div>
 
-        <!-- Categoríass -->
+        <!-- Categorías -->
         <h2 class="category-title">Productos</h2>
         {% for categoria, productos in productos_por_categoria %}
-        <h3>{{ categoria|capfirst }}</h3>
-        <div class="row">
-            {% for producto in productos %}
-            <div class="col-md-4">
-                <div class="product-card">
-                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid rounded">
-                    <h5 class="mt-2">{{ producto.nombre }}</h5>
-                    <p class="text-muted">{{ producto.descripcion }}</p>
-                    <p class="font-weight-bold">${{ producto.precio }}</p>
-                    <button class="btn btn-primary">Agregar al carrito</button>
-                </div>
+            <h3>{{ categoria|capfirst }}</h3>
+            <div class="row">
+                {% for producto in productos %}
+                    <div class="col-md-4">
+                        <div class="product-card" data-category="{{ categoria|lower }}">
+                            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid rounded">
+                            <h5 class="mt-2">{{ producto.nombre }}</h5>
+                            <p class="text-muted">{{ producto.descripcion }}</p>
+                            <p class="font-weight-bold">${{ producto.precio }}</p>
+                            <button class="btn btn-primary">Agregar al carrito</button>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>No hay productos en esta categoría.</p>
+                {% endfor %}
             </div>
-            {% empty %}
-            <p>No hay productos en esta categoría.</p>
-            {% endfor %}
-        </div>
         {% endfor %}
+    </div>
 
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const categorySelect = document.getElementById('category-select');
+        const productCards = document.querySelectorAll('.product-card');
 
+        // Función para filtrar productos
+        function filterProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedCategory = categorySelect.value.toLowerCase();
 
-    
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
+            productCards.forEach(card => {
+                const productName = card.querySelector('h5').textContent.toLowerCase();
+                const productCategory = card.getAttribute('data-category').toLowerCase();
+                
+                const matchesSearch = productName.includes(searchTerm);
+                const matchesCategory = selectedCategory === '' || productCategory === selectedCategory;
 
+                if (matchesSearch && matchesCategory) {
+                    card.parentElement.style.display = 'block'; // Muestra el producto
+                } else {
+                    card.parentElement.style.display = 'none'; // Oculta el producto
+                }
+            });
+        }
 
-</body></html>
+        // Event listeners
+        searchInput.addEventListener('input', filterProducts);
+        categorySelect.addEventListener('change', filterProducts);
+    </script>
+</body>
+<
